@@ -1,4 +1,4 @@
-import Occurrences from "../models/Occurrence.js"
+const Occurrences = require("../models/Occurrence.js")
 
 class OccurrenceController {
     static create = (req, res) => {
@@ -62,4 +62,4 @@ class OccurrenceController {
     }
 }
 
-export default OccurrenceController
+module.exports = OccurrenceController

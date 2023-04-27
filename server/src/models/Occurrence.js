@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+const mongoose = require("mongoose")
 
 const OccurrenceSchema = new mongoose.Schema(
     {
@@ -10,8 +10,8 @@ const OccurrenceSchema = new mongoose.Schema(
       token: {type: String, required: true},
       user_id: {type: Number, required: true},
     }
-  );
+);
   
-  const Occurrences = mongoose.model('occurrences', OccurrenceSchema);
+const Occurrences = mongoose.model('occurrences', OccurrenceSchema)
   
-  export default Occurrences;
+module.exports = Occurrences;
