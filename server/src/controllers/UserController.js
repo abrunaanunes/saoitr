@@ -1,16 +1,23 @@
-import Users from "../models/User.js"
-import { body } from "express-validator"
+const Users = require("../models/User")
+const { body } = require("express-validator")
+const { validationResult } = require("express-validator")
 
 class UserController {
     static create = (req, res) => {
-        req
-        .getValidationResult() // to get the result of above validate fn
-        .then(validationHandler())
-        .then(() => {
-            const data = req.body
-        })
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                message: errors.array()[0].msg,
+            })
+        }
 
-        let user = new Users(data);
+        const {name, email, password} = res
+        
+        let user = new Users({
+            name: name,
+            email: email,
+            password: password,
+        })
 
         try {
             user.save()
@@ -25,13 +32,24 @@ class UserController {
     }
 
     static show = (req, res) => {
-        let user = new Users(req.body);
+        const { id } = req.params
+        if(!id) {
+            return res.status(400).json({
+                message: "Por favor, informe um ID do usuário"
+            })
+        }
 
         try {
-            user.save()
-            res.status(201).json({
-                message: 'Usuário criado com sucesso'
-            })
+            const query = { id: id }
+            const user = Users.findOne(query)
+
+            if(!user) {
+                return res.status(400).json({
+                    message: "Essas credenciais não correspondem aos nossos registros."
+                })
+            }
+            return res.status(200).send(user)
+            
         } catch(error) {
             res.status(500).json({
                 message: error
@@ -80,7 +98,7 @@ class UserController {
                         .isEmail().withMessage('O e-mail precisa ser válido.')
                         .isLength({min: 2, max: 125}).withMessage('O email deve ter no mínimo 10 e no máximo 125 caracteres.')
                         .custom(value => {
-                            return User.findUserByEmail(value).then(user => {
+                            return Users.findOne({email: value}).then(user => {
                             if (user) {
                                 return Promise.reject('Este e-mail já está sendo utilizado.')
                             }
@@ -95,4 +113,4 @@ class UserController {
     }
 }
 
-export default UserController
+module.exports = UserController
