@@ -42,9 +42,38 @@ router.delete('/users/:userId', (req, res) => {
     })
 })
 
-router.post('/occurrences', OccurrenceController.create)
-router.put('/occurrences/:occurrenceId', OccurrenceController.update)
-router.get('/occurrences/:occurrenceId', OccurrenceController.show)
-router.delete('/occurrences/:occurrenceId', OccurrenceController.delete)
+// Ocorrências
+router.post('/occurrences', OccurrenceController.validate('create'), (req, res) => {
+    OccurrenceController.create(req, res).catch(error => {
+        console.log('Erro no servidor: ', error)
+        res.status(500).json({
+            message: 'Erro no servidor.'
+        })
+    })
+})
+router.put('/occurrences/:occurrenceId', OccurrenceController.validate('update'), (req, res) => {
+    OccurrenceController.update(req, res).catch(error => {
+        console.log('Erro no servidor: ', error)
+        res.status(500).json({
+            message: 'Erro no servidor.'
+        })
+    })
+})
+router.get('/occurrences/:occurrenceId', (req, res) => {
+    OccurrenceController.show(req, res).catch(error => {
+        console.log('Erro no servidor: ', error)
+        res.status(500).json({
+            message: 'Erro no servidor.'
+        })
+    })
+})
+router.delete('/occurrences/:occurrenceId', (req, res) => {
+    OccurrenceController.delete(req, res).catch(error => {
+        console.log('Erro no servidor: ', error)
+        res.status(500).json({
+            message: 'Erro no servidor.'
+        })
+    })
+})
 
 module.exports = { router }
