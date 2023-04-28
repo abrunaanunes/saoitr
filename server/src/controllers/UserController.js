@@ -22,7 +22,7 @@ class UserController {
 
         await user.save()
         res.status(201).json({
-            message: 'Usuário criado com sucesso'
+            message: 'Usuário criado com sucesso.'
         })
     }
 
@@ -30,7 +30,7 @@ class UserController {
         const { userId } = req.params
         if(!userId) {
             return res.status(400).json({
-                message: "Por favor, informe um ID do usuário"
+                message: "Por favor, informe um ID do usuário."
             })
         }
 
@@ -39,7 +39,7 @@ class UserController {
         
         if(!user) {
             return res.status(400).json({
-                message: "Essas credenciais não correspondem aos nossos registros."
+                message: "Essas credenciais não correspondem aos nossos registros.."
             })
         }
 
@@ -54,7 +54,7 @@ class UserController {
         const { userId } = req.params
         if(!userId) {
             return res.status(400).json({
-                message: "Por favor, informe um ID do usuário"
+                message: "Por favor, informe um ID do usuário."
             })
         }
 
@@ -80,14 +80,14 @@ class UserController {
         const { userId } = req.params
         if(!userId) {
             return res.status(400).json({
-                message: "Por favor, informe um ID do usuário"
+                message: "Por favor, informe um ID do usuário."
             })
         }
 
         const query = { id: userId }
         await Users.findOneAndDelete(query)
         res.status(200).json({
-            message: 'Usuário deletado com sucesso'
+            message: 'Usuário deletado com sucesso.'
         })
     }
 
@@ -96,9 +96,11 @@ class UserController {
             case 'create':
                 return [ 
                     body('name')
+                        .exists().withMessage('O nome é obrigatório.')
                         .isLength({min: 2, max: 125}).withMessage('O nome deve ter no mínimo 2 e no máximo 125 caracteres.'),
 
                     body('email')
+                        .exists().withMessage('O e-mail é obrigatório.')
                         .isEmail().withMessage('O e-mail precisa ser válido.')
                         .isLength({min: 2, max: 125}).withMessage('O email deve ter no mínimo 10 e no máximo 125 caracteres.'),
                         // .custom(async (value) => {
@@ -110,17 +112,21 @@ class UserController {
                         // }),
 
                     body('password')
+                        .exists().withMessage('A senha é obrigatória.')
+                        .isMD5()
                         .isLength({min: 2, max: 125}).withMessage('A senha deve ter no mínimo 2 e no máximo 125 caracteres.'),
                 ]   
             break
             case 'update':
                 return [
                     body('name')
+                        .exists().withMessage('O nome é obrigatório.')
                         .isLength({min: 2, max: 125}).withMessage('O nome deve ter no mínimo 2 e no máximo 125 caracteres.'),
 
                     body('email')
+                        .exists().withMessage('O e-mail é obrigatório.')
                         .isEmail().withMessage('O e-mail precisa ser válido.')
-                        .isLength({min: 2, max: 125}).withMessage('O email deve ter no mínimo 10 e no máximo 125 caracteres.')
+                        .isLength({min: 2, max: 125}).withMessage('O email deve ter no mínimo 10 e no máximo 125 caracteres.'),
                         // .custom(async (value) => {
                         //     return await Users.findOne({email: value}).then(user => {
                         //     if (user) {
@@ -128,8 +134,10 @@ class UserController {
                         //     }
                         //     })
                         // }),
-                        .optional(true, null),
                     body('password')
+                        .exists().withMessage('A senha é obrigatória.')
+                        .optional(true, null)
+                        .isMD5()
                         .isLength({min: 2, max: 125}).withMessage('A senha deve ter no mínimo 2 e no máximo 125 caracteres.')
                 ]
             break

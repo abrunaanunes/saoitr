@@ -24,7 +24,7 @@ class OccurrenceController {
 
         await occurrence.save()
         res.status(201).json({
-            message: 'Ocorrência criada com sucesso'
+            message: 'Ocorrência criada com sucesso.'
         })
     }
 
@@ -32,7 +32,7 @@ class OccurrenceController {
         const { occurrenceId } = req.params
         if(!occurrenceId) {
             return res.status(400).json({
-                message: "Por favor, informe o ID da ocorrência"
+                message: "Por favor, informe o ID da ocorrência."
             })
         }
 
@@ -41,7 +41,7 @@ class OccurrenceController {
         
         if(!occurrence) {
             return res.status(400).json({
-                message: "Essas credenciais não correspondem aos nossos registros."
+                message: "Essas credenciais não correspondem aos nossos registros.."
             })
         }
 
@@ -59,7 +59,7 @@ class OccurrenceController {
         const { occurrenceId } = req.params
         if(!occurrenceId) {
             return res.status(400).json({
-                message: "Por favor, informe o ID da ocorrência"
+                message: "Por favor, informe o ID da ocorrência."
             })
         }
 
@@ -88,14 +88,14 @@ class OccurrenceController {
         const { occurrenceId } = req.params
         if(!occurrenceId) {
             return res.status(400).json({
-                message: "Por favor, informe o ID da ocorrência"
+                message: "Por favor, informe o ID da ocorrência."
             })
         }
 
         const query = { id: occurrenceId }
         await Occurrences.findOneAndDelete(query)
         res.status(200).json({
-            message: 'Ocorrência deletada com sucesso'
+            message: 'Ocorrência deletada com sucesso.'
         })
     }
 
@@ -104,32 +104,32 @@ class OccurrenceController {
             case 'create':
                 return [ 
                     body('registered_at')
-                        .exists().withMessage('A data é obrigatória')
-                        .isDate().withMessage('A data deve estar em um formato válido'),
+                        .exists().withMessage('A data é obrigatória.')
+                        .isDate().withMessage('A data deve estar em um formato válido.'),
                     body('local')
-                        .exists().withMessage('O local é obrigatório'),
+                        .exists().withMessage('O local é obrigatório.'),
                     body('occurrence_type')
-                        .exists().withMessage('O tipo de ocorrência é obrigatório'),
+                        .exists().withMessage('O tipo de ocorrência é obrigatório.'),
                     body('km')
-                        .exists().withMessage('O km é obrigatório'),
+                        .exists().withMessage('O km é obrigatório.'),
                     body('user_id')
-                        .exists().withMessage('O ID do usuário é obrigatório'),
+                        .exists().withMessage('O ID do usuário é obrigatório.'),
 
                 ]   
             break
             case 'update':
                 return [
                     body('registered_at')
-                        .exists().withMessage('A data é obrigatória')
-                        .isDate().withMessage('A data deve estar em um formato válido'),
+                        .exists().withMessage('A data é obrigatória.')
+                        .isDate().withMessage('A data deve estar em um formato válido.'),
                     body('local')
-                        .exists().withMessage('O local é obrigatório'),
+                        .exists().withMessage('O local é obrigatório.'),
                     body('occurrence_type')
-                        .exists().withMessage('O tipo de ocorrência é obrigatório'),
+                        .exists().withMessage('O tipo de ocorrência é obrigatório.'),
                     body('km')
-                        .exists().withMessage('O km é obrigatório'),
+                        .exists().withMessage('O km é obrigatório.'),
                     body('user_id')
-                        .exists().withMessage('O ID do usuário é obrigatório'),
+                        .exists().withMessage('O ID do usuário é obrigatório.'),
                 ]
             break
         }
