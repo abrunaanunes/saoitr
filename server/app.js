@@ -7,7 +7,6 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json())
 app.use(router)
-// app.use(expressValidator)
 
 database.on("error", console.log.bind(console, "Connection error"))
 database.once("open", () => { console.log("Successful connection") })
