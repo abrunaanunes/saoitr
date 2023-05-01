@@ -1,8 +1,18 @@
 const Occurrences = require("../models/Occurrence")
-const { body } = require("express-validator")
+const { body, param } = require("express-validator")
 const { validationResult } = require("express-validator")
 
 class OccurrenceController {
+    static async index(req, res) {
+        Occurrences.find({}).toArray(function(err, items) {
+            if (err) {
+              console.log(err);
+              return res.status(500).json({ error: 'Erro ao buscar objetos no banco de dados' })
+            }
+            res.status(200).json(items)
+        });
+    }
+
     static async create(req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -28,14 +38,8 @@ class OccurrenceController {
         })
     }
 
-    static async show(req, res) {
+    static async read(req, res) {
         const { occurrenceId } = req.params
-        if(!occurrenceId) {
-            return res.status(400).json({
-                message: "Por favor, informe o ID da ocorrência."
-            })
-        }
-
         const query = { id: occurrenceId }
         const occurrence = await Occurrences.findOne(query).exec()
         
@@ -86,12 +90,6 @@ class OccurrenceController {
 
     static async delete(req, res) {
         const { occurrenceId } = req.params
-        if(!occurrenceId) {
-            return res.status(400).json({
-                message: "Por favor, informe o ID da ocorrência."
-            })
-        }
-
         const query = { id: occurrenceId }
         await Occurrences.findOneAndDelete(query)
         res.status(200).json({
@@ -116,7 +114,11 @@ class OccurrenceController {
                         .exists().withMessage('O ID do usuário é obrigatório.'),
 
                 ]   
-            break
+            case 'read': 
+                return [
+                    param('occurrenceId')
+                        .exists().withMessage('Informe o ID da ocorrência')
+                ]
             case 'update':
                 return [
                     body('registered_at')
@@ -131,7 +133,11 @@ class OccurrenceController {
                     body('user_id')
                         .exists().withMessage('O ID do usuário é obrigatório.'),
                 ]
-            break
+            case 'delete': 
+                return [
+                    param('occurrenceId')
+                        .exists().withMessage('Informe o ID da ocorrência')
+                ]
         }
     }
 }

@@ -1,8 +1,50 @@
 const Users = require("../models/User")
-const { body } = require("express-validator")
+const { body, param } = require("express-validator")
 const { validationResult } = require("express-validator")
+const md5 = require('md5')
+const jwt = require('jsonwebtoken')
 
 class UserController {
+    static async login(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                message: errors.array()[0].msg,
+            })
+        }
+        const {email, password} = req.body
+        
+        const query = { email: email}
+        const user = await Users.findOne(query).exec()
+        
+        if(!user) {
+            return res.status(400).json({
+                message: "Essas credenciais não correspondem aos nossos registros."
+            })
+        }
+
+        // Check if password match
+        const checkedPaasword = password == user.password ?? false
+
+        if(!checkedPaasword) {
+            return res.status(400).json({
+                message: "Essas credenciais não correspondem aos nossos registros. -- SENHA INCORRETA"
+            })
+        } 
+
+        // Autenticação
+        const secret = '24BRUNANUNES1234567'
+        const token = jwt.sign({
+            id: user.id
+        },
+        secret)
+        
+        res.status(200).json({
+            message: 'Login realizado com sucesso.',
+            token: token,
+        })
+    }
+
     static async create(req, res) {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -26,14 +68,8 @@ class UserController {
         })
     }
 
-    static async show(req, res) {
+    static async read(req, res) {
         const { userId } = req.params
-        if(!userId) {
-            return res.status(400).json({
-                message: "Por favor, informe um ID do usuário."
-            })
-        }
-
         const query = { id: userId }
         const user = await Users.findOne(query).exec()
         
@@ -78,12 +114,6 @@ class UserController {
 
     static async delete(req, res) {
         const { userId } = req.params
-        if(!userId) {
-            return res.status(400).json({
-                message: "Por favor, informe um ID do usuário."
-            })
-        }
-
         const query = { id: userId }
         await Users.findOneAndDelete(query)
         res.status(200).json({
@@ -113,10 +143,14 @@ class UserController {
 
                     body('password')
                         .exists().withMessage('A senha é obrigatória.')
-                        .isMD5()
+                        .isMD5().withMessage('A senha não possui o formato MD5')
                         .isLength({min: 2, max: 125}).withMessage('A senha deve ter no mínimo 2 e no máximo 125 caracteres.'),
                 ]   
-            break
+            case 'read': 
+                return [
+                    param('userId')
+                        .exists().withMessage('Informe o ID do usuário')
+                ]
             case 'update':
                 return [
                     body('name')
@@ -137,10 +171,26 @@ class UserController {
                     body('password')
                         .exists().withMessage('A senha é obrigatória.')
                         .optional(true, null)
-                        .isMD5()
+                        .isMD5().withMessage('A senha não possui o formato MD5')
                         .isLength({min: 2, max: 125}).withMessage('A senha deve ter no mínimo 2 e no máximo 125 caracteres.')
                 ]
-            break
+            case 'delete': 
+                return [
+                    param('userId')
+                        .exists().withMessage('Informe o ID do usuário')
+                ]
+            case 'login':
+                return [
+                    body('email')
+                        .exists().withMessage('O e-mail é obrigatório.')
+                        .isEmail().withMessage('O e-mail precisa ser válido.')
+                        .isLength({min: 2, max: 125}).withMessage('O email deve ter no mínimo 10 e no máximo 125 caracteres.'),
+
+                    body('password')
+                        .exists().withMessage('A senha é obrigatória.')
+                        .isLength({min: 2, max: 125}).withMessage('A senha deve ter no mínimo 2 e no máximo 125 caracteres.')
+                        .isMD5().withMessage('A senha não possui o formato MD5')
+                ]
         }
     }
 }
