@@ -6,10 +6,12 @@ import {
     Panel,
     FlexboxGrid } from 'rsuite'
 import 'rsuite/dist/rsuite.min.css'
+import Menu from '../components/Menu'
 
 function Register() {
     return (
         <div className="Page">
+            <Menu></Menu>
             <Content>
                 <FlexboxGrid justify="center">
                     <FlexboxGrid.Item colspan={12}>

@@ -5,3 +5,26 @@
   height: 100vh;
   width: 100vw;
 }
+
+.Content {
+  margin: 0 2.5rem;
+}
+
+.Menu {
+  width: 100vw;
+  padding: 0 2.5rem;
+  position: absolute;
+  top: 0;
+}
+
+.Card {
+  padding: 2rem;
+  border: 1px solid #cecece;
+  height: 4rem;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.Row {
+  margin-bottom: 2rem;
+}
