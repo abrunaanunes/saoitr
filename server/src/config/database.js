@@ -1,10 +1,13 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
 
-const dbUser = process.env.DB_USER
-const dbPassword = process.env.DB_PASSWORD
+const user = process.env.DB_USER
+const pass = process.env.DB_PASSWORD
+const host = process.env.DB_HOST
+const port = process.env.DB_PORT
 
-mongoose.connect(`mongodb+srv://${dbUser}:${dbPassword}@projetoclienteservidor.gcvzies.mongodb.net/?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb://${user}:${pass}@${host}:${port}`)
+
 let database = mongoose.connection
 
 module.exports = { database }

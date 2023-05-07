@@ -3,7 +3,7 @@ const { database } = require("./src/config/database")
 const express = require("express")
 const expressValidator = require('express-validator')
 const app = express()
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.SERVER_PORT;
 
 app.use(express.json())
 app.use(router)
