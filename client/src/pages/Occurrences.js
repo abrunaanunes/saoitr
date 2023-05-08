@@ -4,7 +4,7 @@ import 'rsuite/dist/rsuite.min.css'
 import Menu from '../components/Menu'
 import axios from 'axios'
 
-function Home() {
+function Occurrences() {
     const API_URL = process.env.API_URL
     const [occurrences, setOccurrences] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -65,4 +65,4 @@ function Home() {
     )
 }
 
-export default Home
+export default Occurrences
