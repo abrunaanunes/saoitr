@@ -4,13 +4,9 @@ const { validationResult } = require("express-validator")
 
 class OccurrenceController {
     static async index(req, res) {
-        Occurrences.find({}).toArray(function(err, items) {
-            if (err) {
-              console.log(err);
-              return res.status(500).json({ error: 'Erro ao buscar objetos no banco de dados' })
-            }
-            res.status(200).json(items)
-        });
+        return Occurrences.find({})
+        .then((occurrences) => res.send(occurrences))
+        .catch((err) => res.status(400).send(err.message))
     }
 
     static async create(req, res) {
