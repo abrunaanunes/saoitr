@@ -1,34 +1,64 @@
-import {
-    Content,
-    Form,
-    ButtonToolbar,
-    Button,
-    Panel,
-    FlexboxGrid } from 'rsuite'
+import React, { useState, useEffect } from 'react'
+import { Content, Form, ButtonToolbar, Button, Panel, FlexboxGrid, IconButton, Icon } from 'rsuite'
 import 'rsuite/dist/rsuite.min.css'
 import Menu from '../components/Menu'
 
 function Login() {
+    const [email, setEmail] = useState()
+    const [password, setPassword] = useState()
+    const [showPassword, setShowPassword] = useState(false)
+    const [error, setError] = useState()
+    
+    const handleSubmit = (e) => {
+        // e.preventDefault()
+        if(password != passwordConfirmation) {
+            setError('Confirmação da senha incorreta.')
+            return
+        }
+        const formData = { name, email, password };
+        makeLogin(formData)
+    }
+
+    function makeLogin(formData) {
+        axios.post(`${API_URL}/login`, formData, {
+            'Content-Type': 'application/json'
+        })
+        .then((res) => {
+            console.log(res)
+        })
+        .catch((err) => {
+            setError(err.response.data.message)
+        })
+    }
+
     return (
         <div className="Page">
             <Menu></Menu>
             <Content>
                 <FlexboxGrid justify="center">
-                    <FlexboxGrid.Item colspan={12}>
+                    <FlexboxGrid.Item colspan={8}>
                         <Panel header={<h3>Login</h3>} bordered>
-                        <Form fluid>
+                        <Form fluid onSubmit={handleSubmit}>
+                            { error ? 
+                                <div className="Error">
+                                    <p>{error}</p>
+                                </div>
+                            : null }
                             <Form.Group>
                                 <Form.ControlLabel>E-mail</Form.ControlLabel>
-                                <Form.Control name="email" />
+                                <Form.Control name="email" value={email} onChange={setEmail}/>
                             </Form.Group>
-                                <Form.Group>
+                            <Form.Group>
                                 <Form.ControlLabel>Senha</Form.ControlLabel>
-                                <Form.Control name="password" type="password" autoComplete="off" />
+                                <div className="FlexRow">
+                                    <Form.Control name="password" type={!showPassword ? 'password' : 'text'} autoComplete="off" value={password} onChange={setPassword} />
+                                    <IconButton onClick={() => setShowPassword(!showPassword)} />
+                                </div>
                             </Form.Group>
                             <Form.Group>
                             <ButtonToolbar>
-                                <Button appearance="primary">Login</Button>
-                                <Button appearance="link">Cadastrar-se</Button>
+                                <Button type="submit" block size="lg" appearance="primary">Login</Button>
+                                <Button type="button" block size="lg" appearance="link">Cadastrar-se</Button>
                             </ButtonToolbar>
                             </Form.Group>
                         </Form>

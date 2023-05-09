@@ -3,9 +3,10 @@ import { Content, Form, ButtonToolbar, Button, Panel, FlexboxGrid, IconButton, I
 import 'rsuite/dist/rsuite.min.css'
 import axios from 'axios'
 import Menu from '../components/Menu'
+import { VisibleIcon, UnvisibleIcon } from '@rsuite/icons/Visible'
 
 function Register() {
-    const API_URL = process.env.API_URL
+    const API_URL = 'http://localhost:24000'
     const [error, setError] = useState()
     const [name, setName] = useState()
     const [email, setEmail] = useState()
@@ -25,12 +26,14 @@ function Register() {
     }
 
     function makeRegister(formData) {
-        axios.post(`${API_URL}/users`.formData)
+        axios.post(`${API_URL}/users`, formData, {
+            'Content-Type': 'application/json'
+        })
         .then((res) => {
             console.log(res)
         })
         .catch((err) => {
-            console.log(err)
+            setError(err.response.data.message)
         })
     }
 
@@ -40,7 +43,7 @@ function Register() {
             <Menu></Menu>
             <Content>
                 <FlexboxGrid justify="center">
-                    <FlexboxGrid.Item colspan={12}>
+                    <FlexboxGrid.Item colspan={8}>
                         <Panel header={<h3>Cadastre-se</h3>} bordered>
                         <Form fluid onSubmit={handleSubmit}>
                             { error ? 
@@ -58,18 +61,22 @@ function Register() {
                             </Form.Group>
                             <Form.Group>
                                 <Form.ControlLabel>Senha</Form.ControlLabel>
-                                <Form.Control name="password" type={!showPassword ? 'password' : 'text'} autoComplete="off" value={password} onChange={setPassword} />
-                                <IconButton onClick={() => setShowPassword(!showPassword)} />
+                                <div className="FlexRow">
+                                    <Form.Control name="password" type={!showPassword ? 'password' : 'text'} autoComplete="off" value={password} onChange={setPassword} />
+                                    <IconButton onClick={() => setShowPassword(!showPassword)} />
+                                </div>
                             </Form.Group>
                             <Form.Group>
                                 <Form.ControlLabel>Confirmação da senha</Form.ControlLabel>
-                                <Form.Control name="password-confirmation" type={!showPasswordConfirmation ? 'password' : 'text'} autoComplete="off" value={passwordConfirmation} onChange={setPasswordConfirmation} />
-                                <IconButton onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)} />
+                                <div className="FlexRow">
+                                    <Form.Control name="password-confirmation" type={!showPasswordConfirmation ? 'password' : 'text'} autoComplete="off" value={passwordConfirmation} onChange={setPasswordConfirmation} />
+                                    <IconButton onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)} />
+                                </div>
                             </Form.Group>
                             <Form.Group>
                             <ButtonToolbar>
-                                <Button type="submit" appearance="primary">Login</Button>
-                                <Button type="button" appearance="link">Cadastrar-se</Button>
+                                <Button type="submit" block size="lg" appearance="primary">Login</Button>
+                                <Button type="button" block size="lg" appearance="link">Cadastrar-se</Button>
                             </ButtonToolbar>
                             </Form.Group>
                         </Form>

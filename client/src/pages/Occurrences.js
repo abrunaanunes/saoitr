@@ -5,7 +5,7 @@ import Menu from '../components/Menu'
 import axios from 'axios'
 
 function Occurrences() {
-    const API_URL = process.env.API_URL
+    const API_URL = 'http://localhost:24000'
     const [occurrences, setOccurrences] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     

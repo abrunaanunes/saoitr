@@ -5,7 +5,7 @@ import Menu from '../components/Menu'
 import axios from 'axios'
 
 function Home() {
-    const API_URL = process.env.API_URL
+    const API_URL = 'http://localhost:24000'
     const [occurrences, setOccurrences] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     
@@ -45,20 +45,6 @@ function Home() {
                             })
                         ) : 'Não há ocorrências cadastradas.'
                     )}
-                    {/* <Row className="Row">
-                        <Col md={6} sm={12}>
-                        <Card />
-                        </Col>
-                        <Col md={6} sm={12}>
-                        <Card />
-                        </Col>
-                        <Col md={6} sm={12}>
-                        <Card />
-                        </Col>
-                        <Col md={6} sm={12}>
-                        <Card />
-                        </Col>
-                    </Row> */}
                 </Grid>
             </Content>
         </div>

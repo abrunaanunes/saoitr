@@ -38,3 +38,9 @@
   color: #771919;
   font-weight: 400;
 }
+
+.FlexRow {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem
+}
