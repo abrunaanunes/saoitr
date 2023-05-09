@@ -4,12 +4,13 @@ const express = require("express")
 const expressValidator = require('express-validator')
 const app = express()
 const PORT = process.env.SERVER_PORT
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN
 
 app.use(express.json())
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:25000')
-    res.setHeader('Access-Control-Allow-Methods', 'http://localhost:25000')
-    res.setHeader('Access-Control-Allow-Headers', 'http://localhost:25000')
+    res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN)
+    res.setHeader('Access-Control-Allow-Methods', '*')
+    res.setHeader('Access-Control-Allow-Headers', '*')
     res.setHeader('Access-Control-Allow-Credentials', true)
     next()
 })
