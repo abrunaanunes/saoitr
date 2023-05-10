@@ -27,3 +27,5 @@
 
 /server/node_modules
 /server/.env
+
+docker-compose.override.yml
