@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 function checkAuth(req, res, next) {
     const authHeader = req.headers['authorization']
@@ -6,18 +7,18 @@ function checkAuth(req, res, next) {
 
     if(!token) {
         return res.status(401).json({
-            message: "Não autorizado"
+            message: "Não autorizado | não recebeu o token"
         })
     }
 
-    const secret = '24BRUNANUNES1234567'
+    const secret = process.env.JWT_SECRET
 
     try {
-        jwt.verify(totken, secret)
+        jwt.verify(token, secret)
         next()
     } catch (error) {
         return res.status(401).json({
-            message: "Não autorizado"
+            message: "Não autorizado | token inválido"
         })
     }
 }

@@ -3,6 +3,7 @@ const { body, param } = require("express-validator")
 const { validationResult } = require("express-validator")
 const md5 = require('md5')
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 class UserController {
     static async login(req, res) {
@@ -33,14 +34,16 @@ class UserController {
         } 
 
         // Autenticação
-        const secret = '24BRUNANUNES1234567'
+        const secret = process.env.JWT_SECRET
         const token = jwt.sign({
             id: user.id
         },
         secret)
         
         res.status(200).json({
-            message: 'Login realizado com sucesso.',
+            id: user.id,
+            name: user.name,
+            email: user.email,
             token: token,
         })
     }
@@ -64,7 +67,9 @@ class UserController {
 
         await user.save()
         res.status(201).json({
-            message: 'Usuário criado com sucesso.'
+            id: user.id,
+            name: user.name,
+            email: user.email,
         })
     }
 
@@ -116,9 +121,7 @@ class UserController {
         const { userId } = req.params
         const query = { id: userId }
         await Users.findOneAndDelete(query)
-        res.status(200).json({
-            message: 'Usuário deletado com sucesso.'
-        })
+        res.status(200)
     }
 
     static validate(method) {
