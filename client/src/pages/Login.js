@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Content, Form, ButtonToolbar, Button, Panel, FlexboxGrid, IconButton, Icon } from 'rsuite'
+import React, { useState } from 'react'
+import { Content, Form, ButtonToolbar, Button, Panel, FlexboxGrid, IconButton } from 'rsuite'
 import 'rsuite/dist/rsuite.min.css'
 import Menu from '../components/Menu'
+import api from '../services/Api'
 
 function Login() {
     const [email, setEmail] = useState()
@@ -10,17 +11,12 @@ function Login() {
     const [error, setError] = useState()
     
     const handleSubmit = (e) => {
-        // e.preventDefault()
-        if(password != passwordConfirmation) {
-            setError('Confirmação da senha incorreta.')
-            return
-        }
-        const formData = { name, email, password };
+        const formData = { email, password };
         makeLogin(formData)
     }
 
     function makeLogin(formData) {
-        axios.post(`${API_URL}/login`, formData, {
+        api.post('login', formData, {
             'Content-Type': 'application/json'
         })
         .then((res) => {

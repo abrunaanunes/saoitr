@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Content, Form, ButtonToolbar, Button, Panel, FlexboxGrid, IconButton, Icon } from 'rsuite'
 import 'rsuite/dist/rsuite.min.css'
-import axios from 'axios'
+import api from '../services/Api'
 import Menu from '../components/Menu'
-import { VisibleIcon, UnvisibleIcon } from '@rsuite/icons/Visible'
+import { Gear, AddOutline } from '@rsuite/icons'
 
 function Register() {
-    const API_URL = 'http://localhost:24000'
     const [error, setError] = useState()
     const [name, setName] = useState()
     const [email, setEmail] = useState()
@@ -26,7 +25,7 @@ function Register() {
     }
 
     function makeRegister(formData) {
-        axios.post(`${API_URL}/users`, formData, {
+        api.post('users', formData, {
             'Content-Type': 'application/json'
         })
         .then((res) => {
@@ -63,14 +62,14 @@ function Register() {
                                 <Form.ControlLabel>Senha</Form.ControlLabel>
                                 <div className="FlexRow">
                                     <Form.Control name="password" type={!showPassword ? 'password' : 'text'} autoComplete="off" value={password} onChange={setPassword} />
-                                    <IconButton onClick={() => setShowPassword(!showPassword)} />
+                                    <IconButton icon={showPassword ? <Gear/> : <AddOutline/>} onClick={() => setShowPassword(!showPassword)} />
                                 </div>
                             </Form.Group>
                             <Form.Group>
                                 <Form.ControlLabel>Confirmação da senha</Form.ControlLabel>
                                 <div className="FlexRow">
                                     <Form.Control name="password-confirmation" type={!showPasswordConfirmation ? 'password' : 'text'} autoComplete="off" value={passwordConfirmation} onChange={setPasswordConfirmation} />
-                                    <IconButton onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)} />
+                                    <IconButton icon={showPasswordConfirmation ? <Gear/> : <AddOutline/>} onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)} />
                                 </div>
                             </Form.Group>
                             <Form.Group>

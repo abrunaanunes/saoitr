@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Content, Grid, Col,  Row, Card, Panel, Placeholder, Loader } from 'rsuite'
+import { Content, Grid,  Row, Loader } from 'rsuite'
 import 'rsuite/dist/rsuite.min.css'
 import Menu from '../components/Menu'
-import axios from 'axios'
+import api from '../services/Api'
 
 function Home() {
-    const API_URL = 'http://localhost:24000'
     const [occurrences, setOccurrences] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     
@@ -15,7 +14,7 @@ function Home() {
 
     const getData = () => {
         setIsLoading(true)
-        axios.get(`${API_URL}/occurrences`)
+        api.get('occurrences')
         .then((res) => {
             setOccurrences(res.data)
         })
@@ -24,11 +23,11 @@ function Home() {
         })
     }
 
-    const Card = props => (
-        <Panel {...props} bordered header="Card title">
-            <Placeholder.Paragraph />
-        </Panel>
-    )
+    // const Card = props => (
+    //     <Panel {...props} bordered header="Card title">
+    //         <Placeholder.Paragraph />
+    //     </Panel>
+    // )
     return (
         <div className="Page">
             <Menu></Menu>
