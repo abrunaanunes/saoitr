@@ -11,6 +11,8 @@ function checkAuth(req, res, next) {
         })
     }
 
+    // @TODO VERIFICAR SE O TOKEN ESTÁ NA BLACKLIST
+
     const secret = process.env.JWT_SECRET
 
     try {

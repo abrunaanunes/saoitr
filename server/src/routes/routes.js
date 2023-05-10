@@ -14,6 +14,16 @@ router.post('/login', UserController.validate('login'), (req, res) => {
     })
 })
 
+// Logout
+router.post('/logout', checkAuth, UserController.validate('logout'), (req, res) => {
+    UserController.logout(req, res).catch(error => {
+        console.error('Erro no servidor: ', error)
+        res.status(500).json({
+            message: 'Erro no servidor.'
+        })
+    })
+})
+
 // Cadastrar
 router.post('/users', UserController.validate('create'), (req, res) => {
     UserController.create(req, res).catch(error => {

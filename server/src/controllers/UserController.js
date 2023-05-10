@@ -7,6 +7,7 @@ require('dotenv').config()
 
 class UserController {
     static async login(req, res) {
+        // CAMPOS VÁLIDOS?
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
@@ -15,25 +16,26 @@ class UserController {
         }
         const {email, password} = req.body
         
+        // O USUÁRIO EXISTE?
         const query = { email: email}
         const user = await Users.findOne(query).exec()
         
         if(!user) {
-            return res.status(400).json({
+            return res.status(401).json({
                 message: "Essas credenciais não correspondem aos nossos registros."
             })
         }
 
-        // Check if password match
+        // O HASH RECEBIDO É IGUAL AO DO BANCO?
         const checkedPaasword = password == user.password ?? false
 
         if(!checkedPaasword) {
-            return res.status(400).json({
-                message: "Essas credenciais não correspondem aos nossos registros. -- SENHA INCORRETA"
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros."
             })
         } 
 
-        // Autenticação
+        // ASSINATURA DO TOKEN
         const secret = process.env.JWT_SECRET
         const token = jwt.sign({
             id: user.id
@@ -48,7 +50,36 @@ class UserController {
         })
     }
 
+    static async logout(req, res) {
+        // FOI INFORMADO UM ID?
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                message: errors.array()[0].msg,
+            })
+        }
+
+        // O USUÁRIO EXISTE?
+        const user = await Users.findOne(query).exec()
+        if(!user) {
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros."
+            })
+        }
+
+        // @TODO ID DA URL CORRESPONDE AO ID SOLICITANTE?
+        
+
+        // @TODO ADICIONA O TOKEN NO ARRAY DE BLACKLIST
+
+
+        res.status(200).json({
+            message: "Logout realizado com sucesso."
+        })
+    }
+
     static async create(req, res) {
+        // CAMPOS VÁLIDOS? + @TODO JÁ EXISTE USUÁRIO COM ESTE E-MAIL?
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
@@ -74,15 +105,25 @@ class UserController {
     }
 
     static async read(req, res) {
+        // CAMPOS VÁLIDOS? + @TODO JÁ EXISTE USUÁRIO COM ESTE ID?
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                message: errors.array()[0].msg,
+            })
+        }
+
         const { userId } = req.params
         const query = { id: userId }
         const user = await Users.findOne(query).exec()
         
         if(!user) {
-            return res.status(400).json({
-                message: "Essas credenciais não correspondem aos nossos registros.."
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros."
             })
         }
+
+        // @TODO O ID INFORMADO CORRESPONDE AO ID VINCULADO AO TOKEN?
 
         return res.status(200).send({
             id: user.id,
@@ -92,13 +133,7 @@ class UserController {
     }
 
     static async update(req, res) {
-        const { userId } = req.params
-        if(!userId) {
-            return res.status(400).json({
-                message: "Por favor, informe um ID do usuário."
-            })
-        }
-
+        // CAMPOS VÁLIDOS? + @TODO JÁ EXISTE USUÁRIO COM ESTE E-MAIL?
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
@@ -106,6 +141,9 @@ class UserController {
             })
         }
 
+        // @TODO O ID INFORMADO CORRESPONDE AO ID VINCULADO AO TOKEN?
+
+        const { userId } = req.params
         const query = { id: userId }
         const {name, email, password} = req.body
         const user = !password ? await Users.findOneAndUpdate(query, { name, email }, { new: true }) : await Users.findOneAndUpdate(query, { name, email, password }, { new: true })
@@ -118,6 +156,15 @@ class UserController {
     }
 
     static async delete(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                message: errors.array()[0].msg,
+            })
+        }
+
+        // @TODO O ID INFORMADO CORRESPONDE AO ID VINCULADO AO TOKEN?
+
         const { userId } = req.params
         const query = { id: userId }
         await Users.findOneAndDelete(query)
@@ -156,6 +203,8 @@ class UserController {
                 ]
             case 'update':
                 return [
+                    param('userId')
+                        .exists().withMessage('Informe o ID do usuário'),
                     body('name')
                         .exists().withMessage('O nome é obrigatório.')
                         .isLength({min: 2, max: 125}).withMessage('O nome deve ter no mínimo 2 e no máximo 125 caracteres.'),
@@ -193,6 +242,11 @@ class UserController {
                         .exists().withMessage('A senha é obrigatória.')
                         .isLength({min: 2, max: 125}).withMessage('A senha deve ter no mínimo 2 e no máximo 125 caracteres.')
                         .isMD5().withMessage('A senha não possui o formato MD5')
+                ]
+            case 'logout': 
+                return [
+                    param('userId')
+                        .exists().withMessage('Informe o ID do usuário')
                 ]
         }
     }
