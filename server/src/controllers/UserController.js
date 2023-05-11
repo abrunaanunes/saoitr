@@ -38,6 +38,7 @@ class UserController {
         // ASSINATURA DO TOKEN
         const secret = process.env.JWT_SECRET
         const token = jwt.sign({
+            exp: Math.floor(Date.now() / 1000) + (60 * 60), // 1H PARA EXPIRAR
             id: user.id
         },
         secret)
@@ -60,15 +61,26 @@ class UserController {
         }
 
         // O USUÁRIO EXISTE?
+        const { userId } = req.params
+        const query = { id: userId }
         const user = await Users.findOne(query).exec()
         if(!user) {
             return res.status(401).json({
                 message: "Essas credenciais não correspondem aos nossos registros."
             })
         }
-
-        // @TODO ID DA URL CORRESPONDE AO ID SOLICITANTE?
         
+        // ID DA URL CORRESPONDE AO ID SOLICITANTE?
+        const secret = process.env.JWT_SECRET
+        const bearerHeader = req.headers['authorization']
+        const bearerToken = bearerHeader.split(' ')[1];
+        const decoded = jwt.verify(bearerToken, secret)
+
+        if(decoded.userId != user.id) {
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros.  -- ID NÃO CORRESPONDE AO TOKEN"
+            })
+        }
 
         // @TODO ADICIONA O TOKEN NO ARRAY DE BLACKLIST
 
@@ -123,7 +135,17 @@ class UserController {
             })
         }
 
-        // @TODO O ID INFORMADO CORRESPONDE AO ID VINCULADO AO TOKEN?
+        // ID DA URL CORRESPONDE AO ID SOLICITANTE?
+        const secret = process.env.JWT_SECRET
+        const bearerHeader = req.headers['authorization']
+        const bearerToken = bearerHeader.split(' ')[1];
+        const decoded = jwt.verify(bearerToken, secret)
+
+        if(decoded.userId != user.id) {
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros.  -- ID NÃO CORRESPONDE AO TOKEN"
+            })
+        }
 
         return res.status(200).send({
             id: user.id,
@@ -141,7 +163,17 @@ class UserController {
             })
         }
 
-        // @TODO O ID INFORMADO CORRESPONDE AO ID VINCULADO AO TOKEN?
+        // ID DA URL CORRESPONDE AO ID SOLICITANTE?
+        const secret = process.env.JWT_SECRET
+        const bearerHeader = req.headers['authorization']
+        const bearerToken = bearerHeader.split(' ')[1];
+        const decoded = jwt.verify(bearerToken, secret)
+
+        if(decoded.userId != user.id) {
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros.  -- ID NÃO CORRESPONDE AO TOKEN"
+            })
+        }
 
         const { userId } = req.params
         const query = { id: userId }
@@ -163,7 +195,17 @@ class UserController {
             })
         }
 
-        // @TODO O ID INFORMADO CORRESPONDE AO ID VINCULADO AO TOKEN?
+        // ID DA URL CORRESPONDE AO ID SOLICITANTE?
+        const secret = process.env.JWT_SECRET
+        const bearerHeader = req.headers['authorization']
+        const bearerToken = bearerHeader.split(' ')[1];
+        const decoded = jwt.verify(bearerToken, secret)
+
+        if(decoded.userId != user.id) {
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros. -- ID NÃO CORRESPONDE AO TOKEN"
+            })
+        }
 
         const { userId } = req.params
         const query = { id: userId }
