@@ -26,17 +26,17 @@ class UserController {
             })
         }
 
+        const secret = process.env.JWT_SECRET
+       
         // O HASH RECEBIDO É IGUAL AO DO BANCO?
         const checkedPaasword = password == user.password ?? false
-
         if(!checkedPaasword) {
             return res.status(401).json({
-                message: "Essas credenciais não correspondem aos nossos registros."
+                message: "Essas credenciais não correspondem aos nossos registros. -- SENHA INCORRETA"
             })
         } 
 
         // ASSINATURA DO TOKEN
-        const secret = process.env.JWT_SECRET
         const token = jwt.sign({
             exp: Math.floor(Date.now() / 1000) + (60 * 60), // 1H PARA EXPIRAR
             id: user.id
@@ -76,13 +76,15 @@ class UserController {
         const bearerToken = bearerHeader.split(' ')[1];
         const decoded = jwt.verify(bearerToken, secret)
 
-        if(decoded.userId != user.id) {
+        if(decoded.id != user.id) {
             return res.status(401).json({
                 message: "Essas credenciais não correspondem aos nossos registros.  -- ID NÃO CORRESPONDE AO TOKEN"
             })
         }
 
-        // @TODO ADICIONA O TOKEN NO ARRAY DE BLACKLIST
+        // ADICIONA O TOKEN NO ARRAY DE BLACKLIST
+        blacklist.push(bearerToken)
+        console.log(blacklist)
 
 
         res.status(200).json({
@@ -91,7 +93,7 @@ class UserController {
     }
 
     static async create(req, res) {
-        // CAMPOS VÁLIDOS? + @TODO JÁ EXISTE USUÁRIO COM ESTE E-MAIL?
+        // CAMPOS VÁLIDOS?
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
@@ -117,7 +119,7 @@ class UserController {
     }
 
     static async read(req, res) {
-        // CAMPOS VÁLIDOS? + @TODO JÁ EXISTE USUÁRIO COM ESTE ID?
+        // CAMPOS VÁLIDOS?
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
@@ -141,11 +143,22 @@ class UserController {
         const bearerToken = bearerHeader.split(' ')[1];
         const decoded = jwt.verify(bearerToken, secret)
 
-        if(decoded.userId != user.id) {
+        if(decoded.id != user.id) {
             return res.status(401).json({
                 message: "Essas credenciais não correspondem aos nossos registros.  -- ID NÃO CORRESPONDE AO TOKEN"
             })
         }
+
+        // O TOKEN ESTÁ BLOQUEADO?
+        console.error('global: ', blacklist)
+        const isTokenBlocked = blacklist.includes(bearerToken) ?? false
+        
+        if(isTokenBlocked) {
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros. -- TOKEN BLOQUEADO"
+            })
+        }
+        
 
         return res.status(200).send({
             id: user.id,
@@ -155,7 +168,7 @@ class UserController {
     }
 
     static async update(req, res) {
-        // CAMPOS VÁLIDOS? + @TODO JÁ EXISTE USUÁRIO COM ESTE E-MAIL?
+        // CAMPOS VÁLIDOS?
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
@@ -169,9 +182,18 @@ class UserController {
         const bearerToken = bearerHeader.split(' ')[1];
         const decoded = jwt.verify(bearerToken, secret)
 
-        if(decoded.userId != user.id) {
+        if(decoded.id != user.id) {
             return res.status(401).json({
                 message: "Essas credenciais não correspondem aos nossos registros.  -- ID NÃO CORRESPONDE AO TOKEN"
+            })
+        }
+
+        // O TOKEN ESTÁ BLOQUEADO?
+        const isTokenBlocked = blacklist.includes(bearerToken) ?? false
+        
+        if(isTokenBlocked) {
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros. -- TOKEN BLOQUEADO"
             })
         }
 
@@ -201,9 +223,18 @@ class UserController {
         const bearerToken = bearerHeader.split(' ')[1];
         const decoded = jwt.verify(bearerToken, secret)
 
-        if(decoded.userId != user.id) {
+        if(decoded.id != user.id) {
             return res.status(401).json({
                 message: "Essas credenciais não correspondem aos nossos registros. -- ID NÃO CORRESPONDE AO TOKEN"
+            })
+        }
+
+        // O TOKEN ESTÁ BLOQUEADO?
+        const isTokenBlocked = blacklist.includes(bearerToken) ?? false
+        
+        if(isTokenBlocked) {
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros. -- TOKEN BLOQUEADO"
             })
         }
 

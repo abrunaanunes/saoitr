@@ -6,6 +6,8 @@ const app = express()
 const PORT = process.env.SERVER_PORT
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN
 
+global.blacklist = []
+
 app.use(express.json())
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
