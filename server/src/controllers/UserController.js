@@ -224,14 +224,14 @@ class UserController {
                     body('email')
                         .exists().withMessage('O e-mail é obrigatório.')
                         .isEmail().withMessage('O e-mail precisa ser válido.')
-                        .isLength({min: 2, max: 125}).withMessage('O email deve ter no mínimo 10 e no máximo 125 caracteres.'),
-                        // .custom(async (value) => {
-                        //     return await Users.findOne({email: value}).then(user => {
-                        //     if (user) {
-                        //         return Promise.reject('Este e-mail já está sendo utilizado.')
-                        //     }
-                        //     })
-                        // }),
+                        .isLength({min: 2, max: 125}).withMessage('O email deve ter no mínimo 10 e no máximo 125 caracteres.')
+                        .custom(async (value) => {
+                            return await Users.findOne({email: value}).then(user => {
+                            if (user) {
+                                return Promise.reject('Este e-mail já está sendo utilizado.')
+                            }
+                            })
+                        }),
 
                     body('password')
                         .exists().withMessage('A senha é obrigatória.')
@@ -254,14 +254,14 @@ class UserController {
                     body('email')
                         .exists().withMessage('O e-mail é obrigatório.')
                         .isEmail().withMessage('O e-mail precisa ser válido.')
-                        .isLength({min: 2, max: 125}).withMessage('O email deve ter no mínimo 10 e no máximo 125 caracteres.'),
-                        // .custom(async (value) => {
-                        //     return await Users.findOne({email: value}).then(user => {
-                        //     if (user) {
-                        //         return Promise.reject('Este e-mail já está sendo utilizado.')
-                        //     }
-                        //     })
-                        // }),
+                        .isLength({min: 2, max: 125}).withMessage('O email deve ter no mínimo 10 e no máximo 125 caracteres.')
+                        .custom(async (value) => {
+                            return await Users.findOne({email: value}).then(user => {
+                            if (user) {
+                                return Promise.reject('Este e-mail já está sendo utilizado.')
+                            }
+                            })
+                        }),
                     body('password')
                         .exists().withMessage('A senha é obrigatória.')
                         .optional(true, null)
