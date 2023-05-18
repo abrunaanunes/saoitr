@@ -15,7 +15,7 @@ router.post('/login', UserController.validate('login'), (req, res) => {
 })
 
 // Logout
-router.post('/logout/:userId', checkAuth, UserController.validate('logout'), (req, res) => {
+router.post('/logout', checkAuth, UserController.validate('logout'), (req, res) => {
     UserController.logout(req, res).catch(error => {
         console.error('Erro no servidor: ', error)
         res.status(500).json({

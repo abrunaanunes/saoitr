@@ -4,6 +4,7 @@
   align-items: center;
   height: 100vh;
   width: 100vw;
+  background-color: #dbebe9;
 }
 
 .Content {
@@ -12,9 +13,45 @@
 
 .Menu {
   width: 100vw;
+  height: 4.5rem;
+  background-color: #0f0e0f !important;
+  box-shadow: 0 4px 12px rgb(73 80 87 / 18%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
   padding: 0 2.5rem;
-  position: absolute;
+  position: fixed;
   top: 0;
+  z-index: 2;
+}
+
+.LinkMenu {
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+
+.LinkButton {
+  background-color: white;
+  color: #251726;
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 0.75rem;
+}
+
+.LinkButton:hover {
+  background-color: transparent !important;
+}
+
+.LinkMenu:hover {
+  color: white;
+  text-decoration: none;
+  background-color: transparent !important;
 }
 
 .Card {
@@ -25,10 +62,6 @@
   border-radius: 8px;
 }
 
-.Row {
-  margin-bottom: 2rem;
-}
-
 .Error {
   padding: .75rem 1rem;
   background-color: #f9d4d4;
@@ -37,10 +70,4 @@
 
   color: #771919;
   font-weight: 400;
-}
-
-.FlexRow {
-  display: flex;
-  flex-direction: row;
-  gap: 0.25rem
 }

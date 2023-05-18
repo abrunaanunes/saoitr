@@ -1,53 +1,34 @@
-import React, { useState, useEffect } from 'react'
-import { Content, Grid,  Row, Loader } from 'rsuite'
-import 'rsuite/dist/rsuite.min.css'
+import * as React from 'react'
+
+import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
+import CssBaseline from '@mui/material/CssBaseline'
+import Grid from '@mui/material/Grid'
+import Stack from '@mui/material/Stack'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
+import Link from '@mui/material/Link'
+import { ThemeProvider } from '@mui/material/styles'
 import Menu from '../components/Menu'
-import api from '../services/Api'
+import Footer from '../components/Footer'
+import customTheme from '../themeConfig'
 
-function Home() {
-    const [occurrences, setOccurrences] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
-    
-    useEffect(() => {
-        getData()
-    }, []) 
+const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-    const getData = () => {
-        setIsLoading(true)
-        api.get('occurrences')
-        .then((res) => {
-            setOccurrences(res.data)
-        })
-        .finally(() => {
-            setIsLoading(false)
-        })
-    }
-
-    // const Card = props => (
-    //     <Panel {...props} bordered header="Card title">
-    //         <Placeholder.Paragraph />
-    //     </Panel>
-    // )
-    return (
-        <div className="Page">
-            <Menu></Menu>
-            
-            <Content className="Content">
-                <Grid fluid>
-                    <Row className="Row">
-                        <h1>Seja bem-vindo</h1>
-                    </Row>
-                    {isLoading ? <Loader size="md"></Loader> : (
-                        occurrences.length > 0 ? (
-                            occurrences.map((occurrence) => {
-                                {occurrence}
-                            })
-                        ) : 'Não há ocorrências cadastradas.'
-                    )}
-                </Grid>
-            </Content>
-        </div>
-    )
+export default function Home() {
+  
+  return (
+    <ThemeProvider theme={customTheme}>
+      <CssBaseline />
+      <Menu></Menu>
+      <main>
+        
+      </main>
+      <Footer></Footer>
+    </ThemeProvider>
+  )
 }
-
-export default Home

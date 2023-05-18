@@ -61,8 +61,8 @@ class UserController {
         }
 
         // O USUÁRIO EXISTE?
-        const { userId } = req.params
-        const query = { id: userId }
+        const { id } = req.params
+        const query = { id: id }
         const user = await Users.findOne(query).exec()
         if(!user) {
             return res.status(401).json({
@@ -318,7 +318,7 @@ class UserController {
                 ]
             case 'logout': 
                 return [
-                    param('userId')
+                    body('id')
                         .exists().withMessage('Informe o ID do usuário')
                 ]
         }

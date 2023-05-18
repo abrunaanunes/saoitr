@@ -1,90 +1,113 @@
-import React, { useState } from 'react'
-import { Content, Form, ButtonToolbar, Button, Panel, FlexboxGrid, IconButton, Icon } from 'rsuite'
-import 'rsuite/dist/rsuite.min.css'
-import api from '../services/Api'
+import React, { useState } from 'react' 
+import { Avatar, Button, CssBaseline, TextField, Alert, Link, Grid, Box, Typography, Container } from '@mui/material'
+import { ThemeProvider } from '@mui/material/styles'
 import Menu from '../components/Menu'
-import { Gear, AddOutline } from '@rsuite/icons'
+import Footer from '../components/Footer'
+import customTheme from '../themeConfig'
+import api from '../services/Api'
 
-function Register() {
-    const [error, setError] = useState()
-    const [name, setName] = useState()
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
-    const [passwordConfirmation, setPasswordConfirmation] = useState()
-    const [showPassword, setShowPassword] = useState(false)
-    const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false)
+export default function Register() {
+  const [error, setError] = useState()
 
-    const handleSubmit = (e) => {
-        // e.preventDefault()
-        if(password != passwordConfirmation) {
-            setError('Confirmação da senha incorreta.')
-            return
-        }
-        const formData = { name, email, password };
-        makeRegister(formData)
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    const formData = {
+      name: data.get('name'),
+      email: data.get('email'),
+      password: data.get('password'),
     }
+    api.post('users/', formData).then((res) => {
+      console.log(res)
+    }).catch((err) => {
+      setError(err.response.data.message)
+    })
+  }
 
-    function makeRegister(formData) {
-        api.post('users', formData, {
-            'Content-Type': 'application/json'
-        })
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((err) => {
-            setError(err.response.data.message)
-        })
-    }
-
-    
-    return (
-        <div className="Page">
-            <Menu></Menu>
-            <Content>
-                <FlexboxGrid justify="center">
-                    <FlexboxGrid.Item colspan={8}>
-                        <Panel header={<h3>Cadastre-se</h3>} bordered>
-                        <Form fluid onSubmit={handleSubmit}>
-                            { error ? 
-                                <div className="Error">
-                                    <p>{error}</p>
-                                </div>
-                            : null }
-                            <Form.Group>
-                                <Form.ControlLabel>Nome</Form.ControlLabel>
-                                <Form.Control name="name" value={name} onChange={setName}/>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.ControlLabel>E-mail</Form.ControlLabel>
-                                <Form.Control name="email" value={email} onChange={setEmail}/>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.ControlLabel>Senha</Form.ControlLabel>
-                                <div className="FlexRow">
-                                    <Form.Control name="password" type={!showPassword ? 'password' : 'text'} autoComplete="off" value={password} onChange={setPassword} />
-                                    <IconButton icon={showPassword ? <Gear/> : <AddOutline/>} onClick={() => setShowPassword(!showPassword)} />
-                                </div>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.ControlLabel>Confirmação da senha</Form.ControlLabel>
-                                <div className="FlexRow">
-                                    <Form.Control name="password-confirmation" type={!showPasswordConfirmation ? 'password' : 'text'} autoComplete="off" value={passwordConfirmation} onChange={setPasswordConfirmation} />
-                                    <IconButton icon={showPasswordConfirmation ? <Gear/> : <AddOutline/>} onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)} />
-                                </div>
-                            </Form.Group>
-                            <Form.Group>
-                            <ButtonToolbar>
-                                <Button type="submit" block size="lg" appearance="primary">Login</Button>
-                                <Button type="button" block size="lg" appearance="link">Cadastrar-se</Button>
-                            </ButtonToolbar>
-                            </Form.Group>
-                        </Form>
-                        </Panel>
-                    </FlexboxGrid.Item>
-                </FlexboxGrid>
-            </Content>
-        </div>
-    )
+  return (
+    <ThemeProvider theme={customTheme}>
+      <Menu></Menu>
+      <Container component="main" maxWidth="xs"
+        sx={{
+          backgroundColor: "#161b22",
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: 4,
+          borderRadius: 2,
+          marginTop: 6,
+          border: 1,
+          borderColor: '#494949'
+        }}
+      >
+        <CssBaseline />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Cadastre-se
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              { error ?  <Grid item xs={12}><Alert severity="error">{error}</Alert></Grid>  : null }
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="name"
+                  name="name"
+                  required
+                  fullWidth
+                  id="name"
+                  label="Nome"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="E-mail"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Senha"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ backgroundColor: "#157227", borderRadius: 2, mt: 3, mb: 2 }}
+            >
+              Cadastrar
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="#" variant="body2">
+                  Já possui uma conta? Faço o login
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Footer></Footer>
+      </Container>
+    </ThemeProvider>
+  )
 }
-
-export default Register
