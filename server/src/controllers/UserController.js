@@ -22,7 +22,7 @@ class UserController {
         
         if(!user) {
             return res.status(401).json({
-                message: "Essas credenciais não correspondem aos nossos registros."
+                message: "Essas credenciais não correspondem aos nossos registros. -- USUÁRIO NÃ0 ENCONTRADO"
             })
         }
 
@@ -61,16 +61,16 @@ class UserController {
         }
 
         // O USUÁRIO EXISTE?
-        const { id } = req.params
+        const { id } = req.body
         const query = { id: id }
         const user = await Users.findOne(query).exec()
         if(!user) {
             return res.status(401).json({
-                message: "Essas credenciais não correspondem aos nossos registros."
+                message: "Essas credenciais não correspondem aos nossos registros. -- USUÁRIO NÃO ENCONTRADO"
             })
         }
         
-        // ID DA URL CORRESPONDE AO ID SOLICITANTE?
+        // ID DA BODY CORRESPONDE AO ID SOLICITANTE?
         const secret = process.env.JWT_SECRET
         const bearerHeader = req.headers['authorization']
         const bearerToken = bearerHeader.split(' ')[1];
@@ -82,10 +82,15 @@ class UserController {
             })
         }
 
+        // VALIDADE DO TOKEN
+        if(blacklist.find((item) => item == bearerToken)) {
+            return res.status(401).json({
+                message: "Essas credenciais não correspondem aos nossos registros.  -- TOKEN INVÁLIDO"
+            })
+        }
+
         // ADICIONA O TOKEN NO ARRAY DE BLACKLIST
         blacklist.push(bearerToken)
-        console.log(blacklist)
-
 
         res.status(200).json({
             message: "Logout realizado com sucesso."

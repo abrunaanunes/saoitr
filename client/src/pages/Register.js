@@ -5,21 +5,23 @@ import Menu from '../components/Menu'
 import Footer from '../components/Footer'
 import customTheme from '../themeConfig'
 import api from '../services/Api'
+import md5 from 'md5'
 
 export default function Register() {
   const [error, setError] = useState()
-
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const formData = {
       name: data.get('name'),
       email: data.get('email'),
-      password: data.get('password'),
+      password: data.get('password').length > 0 ? md5(data.get('password')) : null
     }
-    api.post('users/', formData).then((res) => {
-      console.log(res)
+    api.post('users', formData).then((res) => {
+      setError(null)
+      alert('Cadastrado com sucesso')
     }).catch((err) => {
+      console.log('Erro no cadastro: ', err)
       setError(err.response.data.message)
     })
   }

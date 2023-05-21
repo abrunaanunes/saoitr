@@ -1,67 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { Content, Grid,  Row, Loader } from 'rsuite'
-import 'rsuite/dist/rsuite.min.css'
+import * as React from 'react'
+import { ThemeProvider } from '@mui/material/styles'
 import Menu from '../components/Menu'
-import api from '../services/Api'
+import Footer from '../components/Footer'
+import customTheme from '../themeConfig'
 
-function Occurrences() {
-    const [occurrences, setOccurrences] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
-    
-    useEffect(() => {
-        getData()
-    }, []) 
 
-    const getData = () => {
-        setIsLoading(true)
-        api.get('occurrences')
-        .then((res) => {
-            setOccurrences(res.data)
-        })
-        .finally(() => {
-            setIsLoading(false)
-        })
-    }
-
-    // const Card = props => (
-    //     <Panel {...props} bordered header="Card title">
-    //         <Placeholder.Paragraph />
-    //     </Panel>
-    // )
-    return (
-        <div className="Page">
-            <Menu></Menu>
-            
-            <Content className="Content">
-                <Grid fluid>
-                    <Row className="Row">
-                        <h1>Seja bem-vindo</h1>
-                    </Row>
-                    {isLoading ? <Loader size="md"></Loader> : (
-                        occurrences.length > 0 ? (
-                            occurrences.map((occurrence) => {
-                                {occurrence}
-                            })
-                        ) : 'Não há ocorrências cadastradas.'
-                    )}
-                    {/* <Row className="Row">
-                        <Col md={6} sm={12}>
-                        <Card />
-                        </Col>
-                        <Col md={6} sm={12}>
-                        <Card />
-                        </Col>
-                        <Col md={6} sm={12}>
-                        <Card />
-                        </Col>
-                        <Col md={6} sm={12}>
-                        <Card />
-                        </Col>
-                    </Row> */}
-                </Grid>
-            </Content>
-        </div>
-    )
+export default function Ocurrences() {
+  
+  return (
+    <ThemeProvider theme={customTheme}>
+      <Menu></Menu>
+      <main>
+        
+      </main>
+      <Footer></Footer>
+    </ThemeProvider>
+  )
 }
-
-export default Occurrences

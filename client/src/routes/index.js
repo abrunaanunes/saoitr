@@ -4,11 +4,11 @@ import Home from "../pages/Home"
 import Login from "../pages/Login"
 import Occurrences from "../pages/Occurrences"
 import Register from "../pages/Register"
+import useAuth from "../hooks/useAuth"
 
-const Private = ({ Item}) => {
-    const authenticated = false
-
-    return !!authenticated ? <Item /> : <Login></Login>
+const Private = ({ Item }) => {
+    const { authenticated } = useAuth()
+    return authenticated > 0 ? <Item /> : <Login />
 }
 
 const RoutesApp = () => {
@@ -17,9 +17,9 @@ const RoutesApp = () => {
             <Fragment>
                 <Routes>
                     {/* <Route exact path="/" element={<Home></Home>}></Route> */}
+                    <Route exact path="/" element={<Register></Register>}></Route>
                     <Route path="/occurrences" element={<Private Item={Occurrences}/>}></Route>
                     <Route path="/login" element={<Login></Login>}></Route>
-                    <Route exact path="/" element={<Register></Register>}></Route>
                 </Routes>
             </Fragment>
         </BrowserRouter>

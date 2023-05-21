@@ -5,21 +5,30 @@ import Menu from '../components/Menu'
 import Footer from '../components/Footer'
 import customTheme from '../themeConfig'
 import api from '../services/Api'
+import md5 from 'md5'
+import useAuth from "../hooks/useAuth"
 
 export default function Login() {
+  const { login } = useAuth()
   const [error, setError] = useState()
 
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
+
     const formData = {
       email: data.get('email'),
-      password: data.get('password'),
+      password: data.get('password').length > 0 ? md5(data.get('password')) : null,
     }
     api.post('/login', formData).then((res) => {
-      console.log(res)
+      setError(null)
+      const token = `${res.data.token}`
+      const user = {id: res.data.id, name: res.data.name, email: res.data.email}
+      login(token, user)
+      window.location.href = '/occurrences'
     }).catch((err) => {
-      setError(err.response.data.message)
+      console.log('Erro no login: ', err)
+      setError(err.response.data.message || 'Ocorreu um erro')
     })
   }
 
