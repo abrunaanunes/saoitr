@@ -8,7 +8,7 @@ import useAuth from "../hooks/useAuth"
 
 const Private = ({ Item }) => {
     const { authenticated } = useAuth()
-    return authenticated > 0 ? <Item /> : <Login />
+    return authenticated > 0 ? <Item /> : <Navigate replace to="/login" />
 }
 
 const RoutesApp = () => {

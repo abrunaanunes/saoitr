@@ -9,7 +9,7 @@ function Menu() {
 
     const navItems = !authenticated ? [
         {title:'Login', href: '/login'}, 
-        {title: 'Cadastre-se', href: '/'}
+        {title: 'Cadastre-se', href: '/register'}
     ] : [
         
     ];
