@@ -22,9 +22,8 @@ export const AuthProvider = ({ children }) => {
     }
 
     const logout = () => {
-        console.log('caiu aqui no logout')
-        localStorage.remove('utfpr_user_token')
-        localStorage.remove('utfpr_user')
+        localStorage.removeItem('utfpr_user_token')
+        localStorage.removeItem('utfpr_user')
     }
     
     return <AuthContext.Provider value={{ user, authenticated: !!user, login, logout, token}}>{children}</AuthContext.Provider>
