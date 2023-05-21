@@ -36,7 +36,7 @@ services:
     ports:
       - "25000:3000"
     volumes:
-      - ./client/src:/app/src
+      - ./client:/app
     stdin_open: true
     tty: true
     networks:
