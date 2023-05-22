@@ -29,8 +29,17 @@ export default function Register() {
   return (
     <ThemeProvider theme={customTheme}>
       <Menu></Menu>
-      <Container component="main" maxWidth="xs"
-        sx={{
+      <Container component="main" sx={{ 
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+       }}
+      >
+        <CssBaseline />
+        <Box maxWidth="xs" sx={{
           backgroundColor: "#161b22",
           display: 'flex',
           flexDirection: 'column',
@@ -39,73 +48,73 @@ export default function Register() {
           borderRadius: 2,
           marginTop: 6,
           border: 1,
-          borderColor: '#494949'
-        }}
-      >
-        <CssBaseline />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Cadastre-se
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              { error ?  <Grid item xs={12}><Alert severity="error">{error}</Alert></Grid>  : null }
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Nome"
-                  autoFocus
-                />
+          borderColor: '#494949',
+          width: '28rem',
+        }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Cadastre-se
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Grid container spacing={2}>
+                { error ?  <Grid item xs={12}><Alert severity="error">{error}</Alert></Grid>  : null }
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="name"
+                    name="name"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Nome"
+                    autoFocus
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="E-mail"
+                    name="email"
+                    autoComplete="email"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Senha"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="E-mail"
-                  name="email"
-                  autoComplete="email"
-                />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ backgroundColor: "#157227", borderRadius: 2, mt: 3, mb: 2 }}
+              >
+                Cadastrar
+              </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href="#" variant="body2">
+                    Já possui uma conta? Faço o login
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Senha"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ backgroundColor: "#157227", borderRadius: 2, mt: 3, mb: 2 }}
-            >
-              Cadastrar
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Já possui uma conta? Faço o login
-                </Link>
-              </Grid>
-            </Grid>
+            </Box>
           </Box>
         </Box>
         <Footer></Footer>

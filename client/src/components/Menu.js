@@ -9,9 +9,11 @@ function Menu() {
 
     const navItems = !authenticated ? [
         {title:'Login', href: '/login'}, 
-        {title: 'Cadastre-se', href: '/register'}
+        {title: 'Cadastre-se', href: '/register'},
+        {title: 'Ocorrências', href: '/'},
     ] : [
-        
+        {title: 'Ocorrências', href: '/'},
+        {title:'Minhas ocorrências', href: '/'}, 
     ];
 
     const handleLogout = (event) => {
@@ -27,7 +29,7 @@ function Menu() {
       }
 
     return (
-        <AppBar position="relative">
+        <AppBar position="absolute">
             <Toolbar>
             <Typography
                 variant="h6"
@@ -48,10 +50,8 @@ function Menu() {
                 LOGO
             </Typography>
             <Box>
-                {!authenticated ? navItems.map((item) => (
-                    <Button href={item.href} sx={{ color: '#fff' }} component={Link}>
-                        {item.title}
-                    </Button>)) : <Button onClick={handleLogout} sx={{ color: '#fff' }}>Logout</Button>}
+                { navItems.map((item) => ( <Button href={item.href} sx={{ color: '#fff' }} component={Link}> {item.title} </Button>)) }
+                { authenticated ? <Button onClick={handleLogout} sx={{ color: '#fff' }}>Logout</Button> : null }
             </Box>
             </Toolbar>
         </AppBar>
