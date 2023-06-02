@@ -103,11 +103,13 @@ class OccurrenceController {
                     body('local')
                         .exists().withMessage('O local é obrigatório.'),
                     body('occurrence_type')
-                        .exists().withMessage('O tipo de ocorrência é obrigatório.'),
+                        .exists().withMessage('O tipo de ocorrência é obrigatório.')
+                        .isInt().withMessage('O tipo de ocorrência deve ser um inteiro.'),
                     body('km')
                         .exists().withMessage('O km é obrigatório.'),
                     body('user_id')
-                        .exists().withMessage('O ID do usuário é obrigatório.'),
+                        .exists().withMessage('O ID do usuário é obrigatório.')
+                        .isInt().withMessage('O ID do usuário deve ser um inteiro.'),
 
                 ]   
             case 'read': 
@@ -123,11 +125,13 @@ class OccurrenceController {
                     body('local')
                         .exists().withMessage('O local é obrigatório.'),
                     body('occurrence_type')
-                        .exists().withMessage('O tipo de ocorrência é obrigatório.'),
+                        .exists().withMessage('O tipo de ocorrência é obrigatório.')
+                        .isInt().withMessage('O tipo de ocorrência deve ser um inteiro.'),
                     body('km')
                         .exists().withMessage('O km é obrigatório.'),
                     body('user_id')
-                        .exists().withMessage('O ID do usuário é obrigatório.'),
+                        .exists().withMessage('O ID do usuário é obrigatório.')
+                        .isInt().withMessage('O ID do usuário deve ser um inteiro.'),
                 ]
             case 'delete': 
                 return [

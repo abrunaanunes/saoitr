@@ -14,6 +14,7 @@ function Menu() {
     ] : [
         {title: 'Ocorrências', href: '/'},
         {title:'Minhas ocorrências', href: '/'}, 
+        {title:'Meu perfil', href: '/account'}, 
     ];
 
     const handleLogout = (event) => {

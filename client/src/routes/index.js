@@ -4,15 +4,18 @@ import Home from "../pages/Home"
 import Login from "../pages/Login"
 import Occurrences from "../pages/Occurrences"
 import Register from "../pages/Register"
+import Account from "../pages/Account"
 import useAuth from "../hooks/useAuth"
 
 const Private = ({ Item }) => {
+    console.log('Private 1')
     const { authenticated } = useAuth()
-    return authenticated > 0 ? <Item /> : <Navigate replace to="/login" />
+    console.log('Private: ', authenticated)
+    return authenticated ? <Item /> : <Navigate replace to="/login" />
 }
 
 const RoutesApp = () => {
-    const { authenticated } = useAuth() 
+    const { authenticated } = useAuth()
     return (
         <BrowserRouter>
             <Fragment>
@@ -21,6 +24,7 @@ const RoutesApp = () => {
                     <Route exact path="/register" element={ authenticated ?  <Navigate replace to="/" /> : <Register/> }></Route>
                     <Route path="/occurrences" element={<Private Item={Occurrences}/>}></Route>
                     <Route path="/login" element={ authenticated ?  <Navigate replace to="/" /> : <Login/> }></Route>
+                    <Route path="/account" element={<Account></Account>} ></Route>
                 </Routes>
             </Fragment>
         </BrowserRouter>
